@@ -1,50 +1,39 @@
 ## 在线wegt扒站 💾
 下载任何网站的完整源代码（包括所有资源）🔨。
 
-👉 在线演示: https://bazhan.net
+👉 在线演示: https://bazhan.net/
 
 ![enter image description here](https://github.com/AhmadIbrahiim/Website-downloader/blob/master/public/Record.gif?raw=true)
-<div align="center">
+<div align=“center”>
 
 </div>
 
-## Description 📒
- Website downloader works with `wget` and `archiver` to download all websites assets and compress then sends it back to the user through socket channel
+## 描述 📒
+ 在线扒站 与 “wget ”和 “archiver ”配合使用，下载所有网站资产并压缩，然后通过套接字通道发送给用户。
  
- **wget params the being used**
+ **使用的 wget 参数**
  
  `wget --mirror --convert-links --adjust-extension --page-requisites 
 --no-parent http://example.org`
 
- **Explanation of the various flags:**
+ **各种标记的解释:**
 
- - --mirror – Makes (among other things) the download recursive.
-- --convert-links – convert all the links (also to stuff like CSS stylesheets) to relative, so it will be suitable for offline viewing.
-- --adjust-extension – Adds suitable extensions to filenames (html or css) depending on their content-type.
-- --page-requisites – Download things like CSS style-sheets and images required to properly display the page offline.
-- --no-parent – When recursing do not ascend to the parent directory. It useful for restricting the download to only a portion of the site
+ - --mirror – 使下载（除其他外）递归。
+- --convert-links – 将所有链接（也包括 CSS 样式表之类的内容）转换为相对链接，以便适合离线查看。
+- --adjust-extension – 根据文件名（html 或 css）的内容类型添加适当的扩展名。
+- --page-requisites – 下载离线正确显示页面所需的 CSS 样式表和图像等内容。
+- --no-parent – 递归时不上升到父目录。它有助于将下载限制在网站的一部分
 
 
-## How to run it 🤔
+## 运行方式 🤔
 
 - `git clone https://github.com/AhmadIbrahiim/Website-downloader.git`
 - `cd Website-downloader`
 - `$ npm install`
 - `$ npm start`
-- `http://localhost:3000/`
+- `http://localhost:6868/`
 
 
 
-# How To Contribute:
- - Open Issue(s) with any bugs you notice.
- - Please create Pull Requests if you think it would be an added value towards our program.
-
-## Liked it ? You can buy a coffee:
-
-<a href="https://www.buymeacoffee.com/aibrahim" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
-
-Thank you,
-
-Email: me@ahmed-ibrahim.com
-
-https://www.ahmed-ibrahim.com
+# 感谢❤️
+ - 代码是根据Website-downloader（https://github.com/Ahmadibrahiim/Website-downloader）    二次开发，
