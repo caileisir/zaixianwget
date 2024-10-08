@@ -27,8 +27,8 @@
 
 ## 运行方式 🤔
 
-- `git clone https://github.com/AhmadIbrahiim/Website-downloader.git`
-- `cd Website-downloader`
+- `git clone https://github.com/caileisir/zaixianwget.git)`
+- `cd zaixianwget`
 - `$ npm install`
 - `$ npm start`
 - `http://localhost:6868/`
