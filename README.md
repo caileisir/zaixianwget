@@ -27,7 +27,7 @@
 
 ## 运行方式 🤔
 
-- `git clone https://github.com/caileisir/zaixianwget.git)`
+- `git clone https://github.com/caileisir/zaixianwget.git`
 - `cd zaixianwget`
 - `$ npm install`
 - `$ npm start`
