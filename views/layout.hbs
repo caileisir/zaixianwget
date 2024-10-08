@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>网站下载器|wget在线扒站-下载任何网站的完整源代码</title>
+    <meta name="keywords" content="网站下载器,在线扒站,wget在线扒站,网站源代码下载,HTML下载,网站克隆,网站备份,网页抓取,网站复制">
+    <meta name="description" content="使用我们强大的在线网站下载器工具，轻松下载任何网站的完整源代码，包括HTML、CSS、JavaScript等。无论是备份还是学习参考，我们都能帮你快速获取网站的全部内容，方便实用。">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
+    <script src="/stylesheets/socket.js"></script>
+<!-- Place this tag in your head or just before your close body tag. -->
+<script async defer src="/stylesheets/buttons.js"></script>
+
+
+  </head>
+  <body>
+    {{{body}}}
+  </body>
+
+<script>
+  var numberOfFiles = 0;
+  const downloadWebsite = document.getElementsByClassName('btn-success')[0];
+  // connect to current socket.io server
+  var socket = io.connect(document.URL);
+  if(!localStorage['token'])
+  localStorage['token']=generateToken(20);
+  
+  // wait for events for this token
+  socket.on(localStorage['token'],(event)=>{
+  console.log(event)
+  document.getElementById('progress').hidden=false;
+  if(event.progress=="Converting")
+  {
+    log.innerHTML=(`<h5>正在压缩100%! </h5><br>`)
+
+  }
+   else if(event.progress=="Completed")
+   {
+        document.getElementById('progress').hidden=true;
+        log.innerHTML=(`请尽快下载，本站不会保存任何压缩包</code><br>`)
+        downloadWebsite.style='display:'
+        downloadWebsite.onclick=function()
+        {
+         window.location='/sites/'+event.file+".zip";
+        }
+
+   }
+   else
+   {
+        const log = document.getElementById('log');
+        if(event.progress.includes('200 OK'))
+        numberOfFiles++;
+        document.getElementById('nFilesP').hidden=false;
+        document.getElementById('nFiles').innerHTML=numberOfFiles
+        log.innerHTML=(`<code> ${event.progress}</code><br>`)
+   }
+  })
+  
+  // Download a website on click
+   const downloadBtn =  document.getElementById("download");
+   downloadBtn.onclick=()=>{
+        var website = document.getElementById('website').value
+        console.log("Now downloading the website ... %s",website)
+        socket.emit('request', { token: localStorage['token'] , website});
+   }
+
+
+
+
+
+  // Generate token for each user for the first time.
+  function generateToken(n) {
+    var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    var token = '';
+    for(var i = 0; i < n; i++) {
+        token += chars[Math.floor(Math.random() * chars.length)];
+    }
+    return token;
+}
+</script>
+
+</html>
+

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <meta name="keywords" content="网站下载器,在线扒站,CSS扒站,网站源代码下载,HTML下载,网站克隆,网站备份,网页抓取,网站复制">
+    <meta name="description" content="使用我们强大的在线网站下载器工具，轻松下载任何网站的完整源代码，包括HTML、CSS、JavaScript等。无论是备份还是学习参考，我们都能帮你快速获取网站的全部内容，方便实用。">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+    <script src="/stylesheets/socket.js"></script>
+    <script async defer src="/stylesheets/buttons.js"></script>
+    <style>
+        body {
+            background-color: #3F90FF; /* Fallback color while the image loads */
+            background-image: url('https://bazhan.net/account-bg.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+        header {
+            position: relative;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+        }
+        .site-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #fff;
+            margin-left: 10px;
+        }
+        .logo {
+            height: 40px; /* Adjust the height to match the site-name height */
+        }
+        footer {
+            background: rgba(255, 255, 255, 0); /* Add a light background for footer to make text readable */
+            padding: 20px;
+        }
+        .red-text {
+            color: red;
+        }
+        .alert {
+            display: none;
+            margin-top: 10px;
+        }
+        .white-text {
+            color: #ff0000;
+        }
+        .announcement {
+            color: #fff;
+            background-color: #f44336;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <img src="/logo.png" alt="logo" class="logo" />
+    <div class="site-name">网站下载器</div>
+    <div aria-busy="true" id="progress" hidden aria-label="Loading, please wait." role="progressbar"></div>
+</header>
+<main role="main">
+    <h1>在线扒站</h1>
+    <p>下载任何网站的全部源代码和资产</p>
+    <div class="container">
+        <div class="row">  
+            <div class="col-lg-12" style="float: none; margin: 0 auto;">
+                <div id="custom-search-input">
+                    <form method="get" class="form" action="/search" id="searchForm">
+                        <div class="input-group col-md-12">
+                            <input type="text" class="form-control input-lg" id="website" name="website" placeholder="请输入完整的链接" />
+                            <span class="input-group-btn">
+                                <button class="btn btn-info btn-lg" id="download" type="button" disabled>
+                                    点击下载
+                                </button>
+                            </span>
+                        </div>
+                    </form>
+                    <div class="alert alert-danger" role="alert" id="alertMessage">
+                        请输入以 http:// 或 https:// 开头的有效链接。
+                    </div>
+                </div>
+                <div class="announcement">
+                    公告：本站下载限速为：5Mb，提交后请耐心等待。如再次出现无法下载，可以通过邮箱：<a href="mailto:caileisir@gmail.com" style="color: #ffffff;">xxx@gmail.com</a> 反馈我。
+                </div>
+                <br>
+                <div style="text-align: center;">
+                    <button class="btn btn-primary" id="donateButton">打赏</button>
+                </div>
+                <br>
+                <center>
+                    <!-- Place this tag where you want the button to render. -->
+                    <a class="github-button" href="https://github.com/caileisir/zaixianwget" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star Ahmadibrahiim/Website-downloader on GitHub">Star</a>
+                </center>
+            </div>
+            <br>
+        </div>
+    </div>
+    <h5 hidden id='nFilesP'>已下载文件总数: <span id='nFiles' style="color: red;font-weight: bold">10</span></h5>
+    <p class="log" id='log'></p>
+    <button style="display: none" class="btn btn-success">下载.ZIP包</button>
+</main>
+<footer>
+    <!-- ADS -->
+    <!--<div style="text-align: center; margin-top: 20px;">
+        <a href="https://www.dimcloud.com/">
+            <img src="http://bazhan.net/2024-06-05+14_56_20.jpg" alt="暗云" style="max-width: 80%; height: auto;">
+        </a>
+    </div>-->
+    <!-- 底部导航 -->
+    <div class="container text-center">
+        <div class="friend-links">
+            <ul class="list-inline">
+                <li class="list-inline-item"><a href="/sitemap.xml" target="_blank" style="color: #ff0000;">网站地图</a></li>
+                <li class="list-inline-item"><a href="https://www.hudbs.com" target="_blank" style="color: #ff0000;">哈德森博客</a></li>
+                <li class="list-inline-item"><a href="https://www.07372.cn" target="_blank" style="color: #ff0000;">码商联盟</a></li>
+                <li class="list-inline-item"><a href="https://ooo.gg" target="_blank" style="color: #ff0000;">小雀的啾窝</a></li>
+                <li class="list-inline-item"><a href="https://xm.ee/" target="_blank" style="color: #ff0000;">熊猫短链</a></li>
+                <li class="list-inline-item"><a href="https://www.guale.me/" target="_blank" style="color: #ff0000;">挂了么</a></li>
+            </ul>
+        </div>
+        <p class="white-text">&copy; 2024 网站下载器</p>
+        <p class="red-text">免责声明：本工具仅供学习和研究使用，请勿用于任何非法用途。下载的网站内容版权归原网站所有者所有。</p>
+    </div>
+</footer>
+
+<!-- Disclaimer Modal -->
+<div class="modal fade" id="disclaimerModal" tabindex="-1" role="dialog" aria-labelledby="disclaimerModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="disclaimerModalLabel">重要提示</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>禁止违法违规内容。</p>
+                <p class="red-text">免责声明：本工具仅供学习和研究使用，请勿用于任何非法用途。下载的网站内容版权归原网站所有者所有。</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="confirmButton">知道了</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Donate Modal -->
+<div class="modal fade" id="donateModal" tabindex="-1" role="dialog" aria-labelledby="donateModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="donateModalLabel">打赏</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div style="text-align: center; margin-top: 20px;">
+                    <p>如果您觉得这个工具对您有帮助，请考虑打赏以支持我们的开发工作。</p>
+                <img src="/aliapy.png" alt="支付宝二维码" style="width: 100%; height: auto;">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function() {
+        function validateWebsite(url) {
+            return url.startsWith('http://') || url.startsWith('https://');
+        }
+
+        $('#website').on('input', function() {
+            if (validateWebsite($(this).val())) {
+                $('#download').prop('disabled', false);
+                $('#alertMessage').hide();
+            } else {
+                $('#download').prop('disabled', true);
+                $('#alertMessage').show();
+            }
+        });
+
+        $('#download').click(function() {
+            if (validateWebsite($('#website').val())) {
+                $('#disclaimerModal').modal('show');
+            } else {
+                $('#alertMessage').show();
+            }
+        });
+
+        $('#confirmButton').click(function() {
+            $('#disclaimerModal').modal('hide');
+        });
+
+        $('#donateButton').click(function() {
+            $('#donateModal').modal('show');
+        });
+    });
+</script>
+<div class="gtranslate_wrapper"></div>
+<script>window.gtranslateSettings = {"default_language":"zh-CN","languages":["zh-CN","en","de","fr","es","ru"],"wrapper_selector":".gtranslate_wrapper"}</script>
+<script src="https://cdn.gtranslate.net/widgets/latest/float.js" defer></script>
+</body>
+</html>
