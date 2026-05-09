@@ -1,9 +1,44 @@
-var util = require('util'),
-    exec = require('child_process').exec;
-    var archiver = require('../archiver')
+var spawn = require('child_process').spawn;
+var archiver = require('../archiver');
 
+function emitProgress(io, data, progress, error) {
+    if (!io || !data || !data.token) {
+        return;
+    }
 
-module.exports=(io,data)=>{
+    io.emit(data.token, {
+        progress: progress,
+        error: error ? error.message : undefined
+    });
+}
+
+function parseDownloadRequest(website) {
+    if (typeof website !== 'string' || website.trim() === '') {
+        throw new Error('Please enter a valid website URL.');
+    }
+
+    var parsed;
+    try {
+        parsed = new URL(website.trim());
+    } catch (err) {
+        throw new Error('Please enter a valid website URL.');
+    }
+
+    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+        throw new Error('Website URL must use http or https.');
+    }
+
+    if (!parsed.host) {
+        throw new Error('Please enter a valid website URL.');
+    }
+
+    return {
+        url: parsed.toString(),
+        folder: parsed.host
+    };
+}
+
+function downloadWebsite(io, data) {
 
 // download all website assets 
 /**
@@ -15,22 +50,53 @@ module.exports=(io,data)=>{
  * --page-requisites – Download things like CSS style-sheets and images required to properly display the page offline.
  * --no-parent – When recurring do not ascend to the parent directory. It useful for restricting the download to only a portion of the site.
  */
-let website ="";
-const child = exec(`wget -mkEpnp --no-if-modified-since ${data.website}`);
+var request;
+try {
+    request = parseDownloadRequest(data && data.website);
+} catch (err) {
+    emitProgress(io, data, 'Error: ' + err.message, err);
+    return;
+}
+
+var child = spawn('wget', ['-mkEpnp', '--no-if-modified-since', request.url]);
+var spawnFailed = false;
 
 // read stdout from the current child.
-child.stderr.on("data",(response)=>{
+child.stderr.on("data",function(response){
 
-    if(response.startsWith("Resolving "))
-    {
-        website= response.substring(response.indexOf('Resolve ')+11,response.indexOf(' ('))
+    emitProgress(io, data, response.toString());
+});
+
+child.stdout.on("data",function(response){
+
+    emitProgress(io, data, response.toString());
+});
+
+child.on('error', function(err) {
+    spawnFailed = true;
+    emitProgress(io, data, 'Error: wget failed to start. Please install wget and try again.', err);
+});
+
+child.on('close',function(code, signal){
+    if (spawnFailed) {
+        return;
     }
-    io.emit(data.token,{progress:response})
-})
 
-child.stderr.on('close',(response)=>{
+    if (code !== 0) {
+        var message = signal
+            ? 'wget stopped with signal ' + signal + '.'
+            : 'wget exited with code ' + code + '.';
+        emitProgress(io, data, 'Error: ' + message, new Error(message));
+        return;
+    }
 
-    io.emit(data.token,{progress:"Converting"})
-    archiver(website,io,data)
-})
+    emitProgress(io, data, "Converting");
+    archiver(request.folder, io, data);
+});
 }
+
+downloadWebsite._internals = {
+    parseDownloadRequest: parseDownloadRequest
+};
+
+module.exports = downloadWebsite;
