@@ -1,7 +1,7 @@
 ## 在线wegt扒站 💾
 下载任何网站的完整源代码（包括所有资源）🔨。
 
-👉 在线演示: https://bazhan.net/
+👉 在线演示: https://bazhan.com.cn/
 
 ![enter image description here](https://github.com/AhmadIbrahiim/Website-downloader/blob/master/public/Record.gif?raw=true)
 <div align=“center”>
